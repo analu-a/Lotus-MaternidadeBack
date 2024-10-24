@@ -20,7 +20,7 @@ const getListarCategoria = async function() {
     }
 }
 
-setInseriCategoria = async function (dadosCategoria, contentType){
+const setInserirCategoria = async function (dadosCategoria, contentType){
     try {
         
         if (String(contentType).toLowerCase() == 'application/json') {
@@ -79,4 +79,70 @@ const setEditarCategoria = async function (id_categoria, dadosCategoria, content
     } catch (error) {
         
     }
+}
+
+const setExcluirCategoria = async function (id) {
+
+    try {
+        let id_categoria = id
+
+        if(id_categoria == '' || id_categoria == undefined || isNaN(id_categoria)) {
+            return message.ERROR_INVALID_ID
+        } else {
+            let validarId = await categoriaDAO.selectByIdCategoria(id_categoria)
+
+            if(validarId == false) {
+                return message.ERROR_NOT_FOUND
+            } else {
+                let dadosCategoria = await categoriaDAO.deletarCategoria(id)
+
+                if(dadosCategoria) {
+                    return message.SUCESS_DELETED_ITEM
+                } else {
+                    console.log(dadosCategoria)
+                    return message.ERROR_INTERNAL_SERVER_DB
+                }
+            }
+        }
+    }catch (error) {
+        return message.ERROR_INTERNAL_SERVER
+    }
+}
+
+const getBuscarCategoriaId = async function (id) {
+
+    try {
+        let id_categoria = id
+        let conteudoJSON = {}
+
+        if(id_categoria == '' || id_categoria == undefined || isNaN(id_categoria)) {
+            return message.ERROR_INVALID_ID
+        } else {
+            let dadosCategoria = await categoriaDAO.selectByIdCategoria(id_categoria)
+
+            if(id_categoria) {
+                if(dadosCategoria.lenght) {
+                    conteudoJSON.categoria = dadosCategoria
+                    conteudoJSON.status_code = 200
+
+                    return conteudoJSON
+                } else {
+                    return message.ERROR_NOT_FOUND
+                }
+            } else {
+                return message.ERROR_INTERNAL_SERVER_DB
+            }
+        }
+    }catch(error) {
+        return message.ERROR_INTERNAL_SERVER
+    }
+}
+
+module.exports={
+    getListarCategoria,
+    setEditarCategoria,
+    setInserirCategoria,
+    setExcluirCategoria,
+    getBuscarCategoriaId
+
 }

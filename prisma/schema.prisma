@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model conteudos_gestante {
+  id_conteudos    Int      @id @default(autoincrement())
+  foto_capa       String   @db.VarChar(300)
+  titulo_conteudo String   @db.VarChar(50)
+  data_conteudo   DateTime @db.Date
+  conteudo        String   @db.LongText
+}
+
+model galeria_gestante {
+  id_galeria_gestante      Int              @id @default(autoincrement())
+  foto_galeria             String           @db.VarChar(300)
+  titulo_galeria           String           @db.VarChar(60)
+  descricao_galeria        String?          @db.VarChar(254)
+  data_foto                DateTime         @db.Date
+  gestante_usuario_galeria Int
+  usuario_gestante         usuario_gestante @relation(fields: [gestante_usuario_galeria], references: [id_usuario_gestante], onDelete: NoAction, onUpdate: NoAction, map: "galeria_gestante_ibfk_1")
+
+  @@index([gestante_usuario_galeria], map: "gestante_usuario_galeria")
+}
+
+model usuario_doula {
+  id_usuario_doula Int    @id @default(autoincrement())
+  nome_doula       String @db.VarChar(80)
+  sobrenome_doula  String @db.VarChar(80)
+  email_doula      String @db.VarChar(254)
+  senha_doula      String @db.VarChar(40)
+  cpf_doula        String @db.VarChar(11)
+  sobremim_doula   String @db.VarChar(254)
+  foto_doula       String @db.VarChar(500)
+  tempo_de_atuacao String @db.VarChar(10)
+}
+
+model usuario_gestante {
+  id_usuario_gestante Int                @id @default(autoincrement())
+  nome_gestante       String             @db.VarChar(80)
+  sobrenome_gestante  String             @db.VarChar(80)
+  idade_gestante      Int
+  peso_gestante       Float              @db.Float
+  altura_gestante     Float              @db.Float
+  email_gestante      String             @db.VarChar(254)
+  senha_gestante      String             @db.VarChar(40)
+  foto_gestante       String?            @db.VarChar(300)
+  galeria_gestante    galeria_gestante[]
+}

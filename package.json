@@ -1,0 +1,20 @@
+{
+  "name": "lotus-backend",
+  "version": "1.0.0",
+  "description": "aplicativo de gravidez",
+  "main": "App.js",
+  "scripts": {
+    "build": "npm install",
+    "start": "node App.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.19.1",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "express": "^4.20.0",
+    "prisma": "^5.19.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
